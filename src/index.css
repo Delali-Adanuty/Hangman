@@ -1,0 +1,138 @@
+*{
+  margin:0;
+  padding:0;
+  font-family: 'dm sans';
+}
+
+body{
+  background-color: #202020;
+  color:white;
+  height:100vh;
+  display: flex;
+  justify-content: center;
+}
+
+header{
+  margin:3rem 0;
+  padding:2rem 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header h1{
+  font-size: 1.25rem;
+  margin-bottom:1rem;
+}
+
+header p{
+  font-size: 0.9rem;
+  max-width:20rem;
+}
+
+section.game-status{
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  padding:.75rem 0;
+  border-radius:.3rem;
+  text-align: center;
+}
+
+section.game-status.won{
+  background-color: #10A95B;
+}
+
+section.game-status.lost{
+  background-color: #BA2A2A;
+}
+
+section.game-status h2{
+  font-size:1.2rem;
+  margin-bottom:.3rem;
+}
+
+section.chips{
+  margin:2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap:.5rem;
+  justify-content: center;
+}
+
+section.chips span{
+  padding:.4rem;
+  border-radius: .12rem;
+  font-size: .9rem;
+  display: flex;
+}
+
+section.chips span.lost::before{
+  content:'❌';
+  background-color: rgba(0,0,0,0.7); 
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+
+section.word{
+  display: flex;
+  justify-content: center;
+}
+
+section.word span{
+  height: 3rem;
+  width:3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #323232;
+  margin:.3rem;
+  border-top-right-radius: .2rem;
+  border-top-left-radius: .2rem;
+  border-bottom:2px solid white;
+}
+
+section.keyboard{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width:40rem;
+  margin-top:3rem;
+}
+
+section.keyboard button{
+  height: 2.5rem;
+  width:2.5rem;
+  border-radius:3px;
+  background-color: #FCBA29;
+  outline:none;
+}
+
+section.bottom{
+  display: flex;
+  justify-content: center;
+  margin:2rem 0;
+}
+
+button.new{
+  border:none;
+  outline:none;
+  border-radius:4px;
+  background-color: #11B5E5;
+  justify-self: center;
+  padding:.7rem 1.17rem;
+  font-size:1rem;
+}
+
+section.keyboard button.green{
+  background-color: green;
+}
+
+section.keyboard button.red{
+  background-color: red;
+}
