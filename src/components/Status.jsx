@@ -4,7 +4,7 @@ export default function Section(props){
             {props.over ? (
                 <>
                 <h2>{props.won? "You win": "You Lose"}</h2>
-                <p>{props.won? "Well done!": "Prepare to learn assembly!"}</p>
+                <p>{props.won? "Well done!": "Better luck next time!"}</p>
                 </>
             ) : 
                 <>

@@ -5,18 +5,19 @@ import Chips from "./Chips"
 import { useState } from "react"
 import Word from "./Word"
 import Keyboard from "./Keyboard"
-import { getFarewellText } from "../data/utils"
 import { getRandomWord } from "../data/utils"
 import Confetti from "react-confetti"
+import LIfeBar from "./LifeBar"
 
 export default function App(){
     const [currentWord, setCurrentWord] = useState(() => getRandomWord());
     const [guessedLetters, setGuessedLetters] = useState([])
-
+    const totalGuesses = 8
     
 
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
     const wrongGuessCount = guessedLetters.length - guessedLetters.filter(item => new Set(currentWord).has(item)).length;
+    const remainingGuesses = totalGuesses - wrongGuessCount
     const isGameWon = currentWord.split('').every(item => guessedLetters.includes(item));
     const isGameLost = languages.length - 1 === wrongGuessCount
     const isGameOver = isGameLost || isGameWon
@@ -47,13 +48,6 @@ export default function App(){
         )
     })
 
-    const langugageChips = languages.map((item, index) => {
-        const classname = index < wrongGuessCount ? "lost" : ""
-        return (
-            <span key={index} style={{backgroundColor:item.backgroundColor, color:item.color}} className={classname}>{item.name}</span>
-        )
-    })
-
     const letterElements = currentWord.split('').map((item, index) => {
         return(
             <span key={index}>
@@ -70,17 +64,14 @@ export default function App(){
     return(
         <>
         {isGameWon && <Confetti />}
-        <Header />
+        <Header  attempt = {remainingGuesses}/>
+        <LIfeBar left={remainingGuesses}/>
         <Status
             over = {isGameOver} 
             won={isGameWon}
             lost = {isGameLost}
-            farewell={wrongGuessCount > 0 && getFarewellText(languages[wrongGuessCount-1].name)}
             lastGuess= {isLastGuessedCorrect}
-        />
-        <Chips
-        data={langugageChips}
-         />
+        />    
          <Word  data={letterElements}/>
          <Keyboard data={keyboardElements} />
          {isGameOver &&
