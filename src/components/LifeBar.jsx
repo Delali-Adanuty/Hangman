@@ -1,6 +1,6 @@
 export default function LIfeBar(props){
-    const bars = Array.from({length:props.left}).map(() => (
-        <span className={`lifebar ${props.left <= 4 ? "red":""}`}></span>
+    const bars = Array.from({length:props.left}).map((item, index) => (
+        <span key={index} className={`lifebar ${props.left <= 4 ? "red":""}`}></span>
     ))
     return(
         <>

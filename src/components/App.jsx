@@ -2,7 +2,7 @@ import Header from "./Header"
 import Status from "./Status"
 import { languages } from "../data/languages"
 import Chips from "./Chips"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Word from "./Word"
 import Keyboard from "./Keyboard"
 import { getRandomWord } from "../data/utils"
@@ -23,7 +23,27 @@ export default function App(){
     const isGameOver = isGameLost || isGameWon
     const isLastGuessedCorrect = guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1])
     
+    function letterListener(){
+        useEffect(() => {
+            if (isGameOver) return;
+            const handleKeyDown = (event) => {
+                const key = event.key;
 
+                if(/^[a-zA-Z]$/.test(key)){
+                    setGuessedLetters(prev => prev.includes(key) ? prev : [...prev, key])
+                }
+            }
+
+            window.addEventListener("keydown", handleKeyDown);
+            
+            return () => {
+                window.removeEventListener("keydown", handleKeyDown);
+            }
+
+        }, [isGameOver])
+    }
+
+    letterListener();
 
     function addGuessedLetter(letter){
         setGuessedLetters(prev => 
