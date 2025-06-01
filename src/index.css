@@ -111,6 +111,7 @@ section.keyboard button{
   border-radius:3px;
   background-color: #FCBA29;
   outline:none;
+  color:black;
 }
 
 section.bottom{
@@ -127,6 +128,7 @@ button.new{
   justify-self: center;
   padding:.7rem 1.17rem;
   font-size:1rem;
+  color:black;
 }
 
 section.keyboard button.green{
