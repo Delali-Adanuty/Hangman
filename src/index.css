@@ -82,6 +82,7 @@ section.chips span.lost::before{
 section.word{
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 section.word span{
@@ -136,8 +137,8 @@ section.keyboard button.green{
   background-color: green;
 }
 
-section.keyboard button.red{
-  background-color: red;
+section.keyboard button.red, section.word span.red{
+  background-color: #BA2A2A;
 }
 
 section.life{
@@ -162,4 +163,12 @@ span.lifebar{
 
 span.lifebar.red{
   background-color: red;
+}
+
+@media (max-width:768px) {
+  section.word span{
+    height: 2rem;
+    width:2rem;
+    margin:.27rem;
+  }
 }

@@ -70,7 +70,7 @@ export default function App(){
 
     const letterElements = currentWord.split('').map((item, index) => {
         return(
-            <span key={index}>
+            <span key={index} className={isGameLost && !guessedLetters.includes(item) ? "red":""}>
                 
                 {isGameLost ? item.toUpperCase() : guessedLetters.includes(item)? item.toUpperCase():""}
                 </span>
@@ -83,7 +83,6 @@ export default function App(){
     }
     return(
         <>
-        {isGameWon && <Confetti />}
         <Header  attempt = {remainingGuesses}/>
         <LIfeBar left={remainingGuesses}/>
         <Status
@@ -97,7 +96,8 @@ export default function App(){
          {isGameOver &&
             <section className="bottom">
             <button className="new" onClick={newGame}>New Game</button>
-         </section>}
+            </section>}
+        {isGameWon && <Confetti/>}
         </>
     )
 }
