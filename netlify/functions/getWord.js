@@ -12,7 +12,6 @@ Do not add any other text to the response to the array. Strictly!
 
 
 export async function getWordAndHint(difficulty){
-    console.log(process.env.VITE_API_KEY, "log")
     const randomSeed = Math.random().toString(36).slice(2, 8);
         try{
             const response = await axios.post(
@@ -30,7 +29,7 @@ export async function getWordAndHint(difficulty){
                 {
                     headers:{
                         'content-type': 'application/json',
-                        'Authorization': `Bearer ${process.env.VITE_API_KEY}`
+                        'Authorization': `Bearer ${process.env.API_KEY}`
                     }
                 }
             )
