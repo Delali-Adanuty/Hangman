@@ -7,7 +7,6 @@ import Keyboard from "./Keyboard"
 import Confetti from "react-confetti"
 import LIfeBar from "./LifeBar"
 import Difficulty from "./Difficulty"
-import { getWordAndHint } from "../data/ai"
 
 export default function App(){
 
@@ -24,14 +23,18 @@ export default function App(){
     const isGameLost = languages.length - 1 === wrongGuessCount
     const isGameOver = isGameLost || isGameWon
     const isGameInProgress = !isGameOver && remainingGuesses !== totalGuesses;
-    const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null
+    const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null;
+    
 
     useEffect(() => {
         async function fetchWord(){
-            const [word, newHints] = await getWordAndHint(difficulty);
+            const response = await fetch("/.netlify/functions/getWord")
+            const data = await response.json()
+            const [word, newHints] = data
             setCurrentWord(word)
             setHints(newHints)
         }
+
 
         fetchWord()
     }, [difficulty])
@@ -101,7 +104,9 @@ export default function App(){
     }):null
 
     async function newGame(){
-        const [word,  newHints] = await getWordAndHint(difficulty)
+        const response = await fetch("/.netlify/functions/getWord")
+        const data = await response.json()
+        const [word, newHints] = data
         setCurrentWord(word)
         setGuessedLetters([])
         setHints(newHints)
