@@ -12,6 +12,11 @@ body{
   justify-content: center;
 }
 
+#root{
+  align-items: center;
+  justify-content: center;
+}
+
 header{
   margin-top:3rem;
   padding:2rem 0;
@@ -29,6 +34,41 @@ header h1{
 header p{
   font-size: 0.9rem;
   max-width:20rem;
+}
+
+section.difficulty{
+  display: flex;
+  justify-content: center;
+}
+
+section.difficulty span{
+  background-color: black;
+  padding:.5rem 1.5rem;
+  margin: 0 1rem 1rem 1rem;
+  border-radius: .3rem;
+  opacity: 0.3;
+}
+
+section.difficulty span.current.easy,
+section.difficulty  span.current.medium,
+section.difficulty span.current.hard{
+  opacity: 1;
+}
+
+section.difficulty span.current.easy{
+  background-color: green;
+}
+
+section.difficulty span.current.medium{
+  background-color: orange;
+}
+
+section.difficulty span.current.hard{
+  background-color: orangered;
+}
+
+section.difficulty span:hover{
+  cursor: default;
 }
 
 section.game-status{
@@ -105,6 +145,7 @@ section.keyboard{
   justify-content: center;
   max-width:40rem;
   margin-top:3rem;
+  justify-self: center;
 }
 
 section.keyboard button{

@@ -1,29 +1,42 @@
 import Header from "./Header"
 import Status from "./Status"
 import { languages } from "../data/languages"
-import Chips from "./Chips"
 import { useState, useEffect } from "react"
 import Word from "./Word"
 import Keyboard from "./Keyboard"
-import { getRandomWord } from "../data/utils"
 import Confetti from "react-confetti"
 import LIfeBar from "./LifeBar"
+import Difficulty from "./Difficulty"
+import { getWordAndHint } from "../data/ai"
 
 export default function App(){
-    const [currentWord, setCurrentWord] = useState(() => getRandomWord());
-    const [guessedLetters, setGuessedLetters] = useState([])
-    const totalGuesses = 8
-    
 
+    const [currentWord, setCurrentWord] = useState(null);
+    const [hints, setHints] = useState(null)
+    const [guessedLetters, setGuessedLetters] = useState([])
+    const totalGuesses = 8;
+    const difficulties = ["Easy", "Medium", "Hard"];
+    const [difficulty, setDifficulty] = useState("Medium");
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
     const wrongGuessCount = guessedLetters.length - guessedLetters.filter(item => new Set(currentWord).has(item)).length;
     const remainingGuesses = totalGuesses - wrongGuessCount
-    const isGameWon = currentWord.split('').every(item => guessedLetters.includes(item));
+    const isGameWon = currentWord ? currentWord.split('').every(item => guessedLetters.includes(item)): null;
     const isGameLost = languages.length - 1 === wrongGuessCount
     const isGameOver = isGameLost || isGameWon
-    const isLastGuessedCorrect = guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1])
-    
-    function letterListener(){
+    const isGameInProgress = !isGameOver && remainingGuesses !== totalGuesses;
+    const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null
+
+    useEffect(() => {
+        async function fetchWord(){
+            const [word, newHints] = await getWordAndHint(difficulty);
+            setCurrentWord(word)
+            setHints(newHints)
+        }
+
+        fetchWord()
+    }, [difficulty])
+
+    function LetterListener(){
         useEffect(() => {
             if (isGameOver) return;
             const handleKeyDown = (event) => {
@@ -40,16 +53,26 @@ export default function App(){
                 window.removeEventListener("keydown", handleKeyDown);
             }
 
-        }, [isGameOver])
+        }, [])
     }
 
-    letterListener();
+    LetterListener();
 
     function addGuessedLetter(letter){
         setGuessedLetters(prev => 
             prev.includes(letter) ? prev : [...prev, letter]
         )
     }
+
+    const difficultyElements = difficulties.map((item, index) => {
+        return <span key={index} onClick={() => changeDifficulty(item)} className={`${difficulty === item ? "current" : null} ${item.toLowerCase()}`}>{item}</span>
+    })  
+
+    function changeDifficulty(item){
+        !isGameInProgress && setDifficulty(item);
+        setGuessedLetters([])
+    }
+
 
     const keyboardElements=alphabet.split('').map((item) => {
         let classname= ""
@@ -68,22 +91,25 @@ export default function App(){
         )
     })
 
-    const letterElements = currentWord.split('').map((item, index) => {
+    const letterElements = currentWord ? currentWord.split('').map((item, index) => {
         return(
             <span key={index} className={isGameLost && !guessedLetters.includes(item) ? "red":""}>
                 
                 {isGameLost ? item.toUpperCase() : guessedLetters.includes(item)? item.toUpperCase():""}
                 </span>
         )
-    })
+    }):null
 
-    function newGame(){
-        setCurrentWord(() => getRandomWord())
+    async function newGame(){
+        const [word,  newHints] = await getWordAndHint(difficulty)
+        setCurrentWord(word)
         setGuessedLetters([])
+        setHints(newHints)
     }
     return(
         <>
-        <Header  attempt = {remainingGuesses}/>
+        <Header />
+        <Difficulty data={difficultyElements}/>
         <LIfeBar left={remainingGuesses}/>
         <Status
             over = {isGameOver} 
