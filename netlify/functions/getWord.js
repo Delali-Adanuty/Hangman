@@ -13,7 +13,7 @@ Do not add any other text to the response to the array. Strictly!
 
 export async function getWordAndHint(difficulty){
     const randomSeed = Math.random().toString(36).slice(2, 8);
-        try{
+        try{  
             const response = await axios.post(
                 'https://api.openai.com/v1/chat/completions',
                 {
@@ -41,7 +41,6 @@ export async function getWordAndHint(difficulty){
 
 export const handler = async (event) => {
   const difficulty = event.queryStringParameters?.difficulty || 'easy';
-
   try {
     const result = await getWordAndHint(difficulty);
     return {
