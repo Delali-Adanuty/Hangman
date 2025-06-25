@@ -30,7 +30,6 @@ export default function App(){
         const response = await fetch(`/.netlify/functions/getWord?type=${difficulty}`)
         const data = await response.json()
         const [word, newHints] = data
-        console.log(word)
         setCurrentWord(word)
         setHints(newHints)
     }
