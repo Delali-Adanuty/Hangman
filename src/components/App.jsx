@@ -7,6 +7,7 @@ import Keyboard from "./Keyboard"
 import Confetti from "react-confetti"
 import LIfeBar from "./LifeBar"
 import Difficulty from "./Difficulty"
+import Hint from "./Hint"
 
 export default function App(){
 
@@ -15,7 +16,7 @@ export default function App(){
     const [guessedLetters, setGuessedLetters] = useState([])
     const totalGuesses = 8;
     const difficulties = ["Easy", "Medium", "Hard"];
-    const [difficulty, setDifficulty] = useState("Medium");
+    const [difficulty, setDifficulty] = useState("Easy");
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
     const wrongGuessCount = guessedLetters.length - guessedLetters.filter(item => new Set(currentWord).has(item)).length;
     const remainingGuesses = totalGuesses - wrongGuessCount
@@ -24,18 +25,17 @@ export default function App(){
     const isGameOver = isGameLost || isGameWon
     const isGameInProgress = !isGameOver && remainingGuesses !== totalGuesses;
     const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null;
-    
+
+    async function fetchWord(){
+        const response = await fetch(`/.netlify/functions/getWord?type=${difficulty}`)
+        const data = await response.json()
+        const [word, newHints] = data
+        console.log(word)
+        setCurrentWord(word)
+        setHints(newHints)
+    }
 
     useEffect(() => {
-        async function fetchWord(){
-            const response = await fetch("/.netlify/functions/getWord")
-            const data = await response.json()
-            const [word, newHints] = data
-            setCurrentWord(word)
-            setHints(newHints)
-        }
-
-
         fetchWord()
     }, [difficulty])
 
@@ -104,12 +104,8 @@ export default function App(){
     }):null
 
     async function newGame(){
-        const response = await fetch("/.netlify/functions/getWord")
-        const data = await response.json()
-        const [word, newHints] = data
-        setCurrentWord(word)
+        fetchWord();
         setGuessedLetters([])
-        setHints(newHints)
     }
     return(
         <>
