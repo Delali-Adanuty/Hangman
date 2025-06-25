@@ -13,6 +13,7 @@ export default function App(){
 
     const [currentWord, setCurrentWord] = useState(null);
     const [hints, setHints] = useState(null)
+    const [hintCount, setHIntCount] = useState(0);
     const [guessedLetters, setGuessedLetters] = useState([])
     const totalGuesses = 8;
     const difficulties = ["Easy", "Medium", "Hard"];
@@ -26,12 +27,16 @@ export default function App(){
     const isGameInProgress = !isGameOver && remainingGuesses !== totalGuesses;
     const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null;
 
+    function changeHintCount(){
+        setHIntCount(prev => ++prev)
+    }
     async function fetchWord(){
         const response = await fetch(`/.netlify/functions/getWord?type=${difficulty}`)
         const data = await response.json()
         const [word, newHints] = data
         setCurrentWord(word)
         setHints(newHints)
+        setHIntCount(0)
     }
 
     useEffect(() => {
@@ -106,8 +111,11 @@ export default function App(){
         fetchWord();
         setGuessedLetters([])
     }
+
+    
     return(
         <>
+        {isGameWon && <Confetti/>}
         <Header />
         <Difficulty data={difficultyElements}/>
         <LIfeBar left={remainingGuesses}/>
@@ -119,11 +127,12 @@ export default function App(){
         />    
          <Word  data={letterElements}/>
          <Keyboard data={keyboardElements} />
+         <Hint data={hints} handleClick={changeHintCount} count={hintCount}/>
          {isGameOver &&
             <section className="bottom">
             <button className="new" onClick={newGame}>New Game</button>
             </section>}
-        {isGameWon && <Confetti/>}
+        
         </>
     )
 }

@@ -18,7 +18,7 @@ body{
 }
 
 header{
-  margin-top:3rem;
+  margin-top:2rem;
   padding:2rem 0;
   text-align: center;
   display: flex;
@@ -163,7 +163,7 @@ section.bottom{
   margin:2rem 0;
 }
 
-button.new{
+button.new, section.hints button{
   border:none;
   outline:none;
   border-radius:4px;
@@ -204,6 +204,31 @@ span.lifebar{
 
 span.lifebar.red{
   background-color: red;
+}
+
+section.hints{
+  margin:.5rem 0;
+  margin-top:2rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+section.hints button{
+  background-color: #10A95B;
+}
+
+section.hints button:disabled{
+  opacity: 0.5;
+}
+
+section.hints ul{
+  margin:.7rem 0;
+}
+
+section.hints ul li{
+  font-size: .9rem;
 }
 
 @media (max-width:768px) {
