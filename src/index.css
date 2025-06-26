@@ -18,7 +18,7 @@ body{
 }
 
 header{
-  margin-top:2rem;
+  margin-top:1.3rem;
   padding:2rem 0;
   text-align: center;
   display: flex;
@@ -69,6 +69,15 @@ section.difficulty span.current.hard{
 
 section.difficulty span:hover{
   cursor: default;
+}
+
+section.difficulty-info{
+  text-align: center;
+  margin-bottom: .8rem;
+}
+
+section.difficulty-info p{
+  font-size: .94rem;
 }
 
 section.game-status{
@@ -190,7 +199,8 @@ section.life{
 
 p.lifebar{
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 span.lifebar{

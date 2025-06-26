@@ -10,7 +10,7 @@ export default function Hint(props){
     
     return(
         <section className="hints">
-            <button onClick={props.handleClick} disabled = {props.count === 3}>{contents[rand]}</button>
+            <button onClick={props.handleClick} disabled = {props.count === 3 || props.handleClick == null}>{contents[rand]}</button>
             {props.data && 
             <ul >
                 {hintElements}

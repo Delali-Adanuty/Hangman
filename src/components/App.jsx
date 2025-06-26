@@ -1,6 +1,5 @@
 import Header from "./Header"
 import Status from "./Status"
-import { languages } from "../data/languages"
 import { useState, useEffect } from "react"
 import Word from "./Word"
 import Keyboard from "./Keyboard"
@@ -13,42 +12,44 @@ export default function App(){
 
     const [currentWord, setCurrentWord] = useState(null);
     const [hints, setHints] = useState(null)
-    const [hintCount, setHIntCount] = useState(0);
+    const [hintCount, setHintCount] = useState(0);
     const [guessedLetters, setGuessedLetters] = useState([])
-    const totalGuesses = 8;
     const difficulties = ["Easy", "Medium", "Hard"];
     const [difficulty, setDifficulty] = useState("Easy");
+    const totalGuesses = difficulty=== "Easy"? 10 : difficulty === "Medium" ? 8 : 7;
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
+    const [hintDamage, setHintDamage] = useState(0);
     const wrongGuessCount = guessedLetters.length - guessedLetters.filter(item => new Set(currentWord).has(item)).length;
-    const remainingGuesses = totalGuesses - wrongGuessCount
+    const remainingGuesses = totalGuesses - wrongGuessCount - hintDamage
     const isGameWon = currentWord ? currentWord.split('').every(item => guessedLetters.includes(item)): null;
-    const isGameLost = languages.length - 1 === wrongGuessCount
+    const isGameLost = remainingGuesses <= 0
     const isGameOver = isGameLost || isGameWon
-    const isGameInProgress = !isGameOver && remainingGuesses !== totalGuesses;
+    const isGameInProgress = !isGameOver && (guessedLetters.length > 0 || hintDamage > 0 || wrongGuessCount > 0);
     const isLastGuessedCorrect = currentWord ? guessedLetters && currentWord.split('').includes(guessedLetters[guessedLetters.length-1]): null;
-
+    console.log(totalGuesses, remainingGuesses)
     function changeHintCount(){
-        setHIntCount(prev => ++prev)
+        setHintCount(prev => ++prev)
+        setHintDamage(difficulty === "Medium" ? hintCount + 1 : difficulty === "Hard" ? (hintCount+1)*2 : 0)
     }
+
     async function fetchWord(){
         const response = await fetch(`/.netlify/functions/getWord?type=${difficulty}`)
         const data = await response.json()
         const [word, newHints] = data
         setCurrentWord(word)
         setHints(newHints)
-        setHIntCount(0)
+        setHintCount(0)
     }
 
     useEffect(() => {
         fetchWord()
-    }, [difficulty])
+    }, [])
 
     function LetterListener(){
         useEffect(() => {
             if (isGameOver) return;
             const handleKeyDown = (event) => {
                 const key = event.key;
-
                 if(/^[a-zA-Z]$/.test(key)){
                     setGuessedLetters(prev => prev.includes(key) ? prev : [...prev, key])
                 }
@@ -72,12 +73,12 @@ export default function App(){
     }
 
     const difficultyElements = difficulties.map((item, index) => {
-        return <span key={index} onClick={() => changeDifficulty(item)} className={`${difficulty === item ? "current" : null} ${item.toLowerCase()}`}>{item}</span>
+        return <span key={index} onClick={() => !isGameInProgress && changeDifficulty(item)} className={`${difficulty === item ? "current" : null} ${item.toLowerCase()}`}>{item}</span>
     })  
 
     function changeDifficulty(item){
         !isGameInProgress && setDifficulty(item);
-        setGuessedLetters([])
+        !isGameInProgress && newGame();
     }
 
 
@@ -110,6 +111,7 @@ export default function App(){
     async function newGame(){
         fetchWord();
         setGuessedLetters([])
+        setHintDamage(0)
     }
 
     
@@ -117,7 +119,7 @@ export default function App(){
         <>
         {isGameWon && <Confetti/>}
         <Header />
-        <Difficulty data={difficultyElements}/>
+        <Difficulty data={difficultyElements} difficulty={difficulty}/>
         <LIfeBar left={remainingGuesses}/>
         <Status
             over = {isGameOver} 
@@ -127,7 +129,7 @@ export default function App(){
         />    
          <Word  data={letterElements}/>
          <Keyboard data={keyboardElements} />
-         <Hint data={hints} handleClick={changeHintCount} count={hintCount}/>
+         <Hint data={hints} handleClick={isGameOver ? null: changeHintCount} count={hintCount}/>
          {isGameOver &&
             <section className="bottom">
             <button className="new" onClick={newGame}>New Game</button>

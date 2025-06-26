@@ -6,8 +6,8 @@ You are an assistant for a Hangman game. Your job is to randomly generate new wo
 Guidelines:
 - Always pick a **new and different** word from previous outputs.
 - Easy words should be common, short(4-6 letters), and simple (e.g., "apple", "house").
-- Medium words can be longer or slightly less common (e.g., "window", "guitar").
-- Hard words should still be everyday vocabulary and still common but more challenging (e.g., "oxygen", "triangle", "journal").
+- Medium words should be 6-7 letters and slightly less common.
+- Hard words should still be common but more challenging and should be 7+ letters.
 - Provide exactly 3 helpful hints that relate to the word's meaning, use, or features — avoid rhymes or spelling clues.
 
 Your response must be in the following **strict JSON format**:

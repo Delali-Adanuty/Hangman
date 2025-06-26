@@ -4,7 +4,7 @@ export default function LIfeBar(props){
     ))
     return(
         <>
-            <p className="lifebar">Incorrect guesses remaining: {props.left}</p>
+            <p className="lifebar">Lives remaining: {props.left}</p>
             <section className="life">
                 {bars}
             </section>
